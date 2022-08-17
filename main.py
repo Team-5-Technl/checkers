@@ -1,5 +1,5 @@
 import os
-import pygame
+import pygame, sys
 
 pygame.font.init()
 
@@ -8,14 +8,25 @@ WIDTH, HEIGHT = 800, 800
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BOARD = pygame.image.load(os.path.join('Assets', 'Board.png'))
 FPS = 10
+
+
 ####################
+
 
 def draw_window():
     WINDOW.blit(BOARD, (0, 0))
+    for i in range(24):
+        if i < 12:
+            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i // 4) % 2))), 25 + 100 * (i // 4), 50, 50)
+            pygame.draw.ellipse(WINDOW, 'white', rectangle_i)
+        else:
+            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i - 12) // 4 % 2))), 225 + 100 * (i // 4), 50, 50)
+            pygame.draw.ellipse(WINDOW, 'black', rectangle_i)
+    # print(rectangles)
     pygame.display.update()
 
+
 def main():
-    
     clock = pygame.time.Clock()
     run = True
     while run:
@@ -24,6 +35,7 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+                sys.exit()
 
         draw_window()
 
@@ -32,4 +44,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
