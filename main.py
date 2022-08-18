@@ -34,17 +34,22 @@ def main():
     run = True
     while run:
         clock.tick(FPS)
+        draw_window()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 sys.exit()
 
-            if pygame.winner() != None:
-            print(pygame.winner())
-            run = False
-            
-        draw_window()
+            # if pygame.winner() != None:
+            # print(pygame.winner())
+            # run = False
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                pos = pygame.mouse.get_pos()
+                for i in white_pieces.values():
+                    # works. but object is a rectangle. it considers that whole are a piece, not just the circle
+                    if abs(i[0] + 25 - pos[0]) <= 25 and abs(i[-1] + 25 - pos[-1]) <= 25:
+                        print('piece selected', pos, i)
 
     pygame.quit()
 
