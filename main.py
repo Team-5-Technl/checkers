@@ -8,9 +8,9 @@ WIDTH, HEIGHT = 800, 800
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BOARD = pygame.image.load(os.path.join('Assets', 'Board.png'))
 FPS = 10
-
-
 ####################
+white_pieces = {}
+black_pieces = {}
 
 
 def draw_window():
@@ -18,11 +18,14 @@ def draw_window():
     for i in range(24):
         if i < 12:
             rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i // 4) % 2))), 25 + 100 * (i // 4), 50, 50)
+            white_pieces['rectangle_'+str(i+1)] = rectangle_i[0:2]
             pygame.draw.ellipse(WINDOW, 'white', rectangle_i)
         else:
             rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * (i // 4 % 2))), 225 + 100 * (i // 4), 50, 50)
+            black_pieces['rectangle_' + str(i + 1)] = rectangle_i[0:2]
             pygame.draw.ellipse(WINDOW, (88, 16, 0), rectangle_i)
-    # print(rectangles)
+    # print(white_pieces)
+    # print(black_pieces)
     pygame.display.update()
 
 
