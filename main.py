@@ -20,8 +20,8 @@ def draw_window():
             rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i // 4) % 2))), 25 + 100 * (i // 4), 50, 50)
             pygame.draw.ellipse(WINDOW, 'white', rectangle_i)
         else:
-            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i - 12) // 4 % 2))), 225 + 100 * (i // 4), 50, 50)
-            pygame.draw.ellipse(WINDOW, 'black', rectangle_i)
+            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * (i // 4 % 2))), 225 + 100 * (i // 4), 50, 50)
+            pygame.draw.ellipse(WINDOW, (88, 16, 0), rectangle_i)
     # print(rectangles)
     pygame.display.update()
 
