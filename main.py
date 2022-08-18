@@ -40,6 +40,10 @@ def main():
                 pygame.quit()
                 sys.exit()
 
+            if pygame.winner() != None:
+            print(pygame.winner())
+            run = False
+            
         draw_window()
 
     pygame.quit()
