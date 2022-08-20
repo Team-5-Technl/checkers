@@ -54,10 +54,10 @@ if rect in kings.values():
             rect.y += 100
             pygame.draw.ellipse(WINDOW, 'white', rect)
         else:
-            print('Another piece at selected location')
+            print('Another piece at selected location. Try again')
             pygame.draw.ellipse(WINDOW, 'white', rect)
     else:
-        print('Illegal move')
+        print('Illegal move. Try again')
         pygame.draw.ellipse(WINDOW, 'white', rect)
 
 
