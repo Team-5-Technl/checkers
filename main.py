@@ -1,5 +1,6 @@
 import os
-import pygame, sys
+import pygame
+import sys
 
 pygame.font.init()
 
@@ -28,37 +29,65 @@ def draw_window():
             pygame.draw.ellipse(WINDOW, black_color, rectangle_i)
     # print(white_pieces)
     # print(black_pieces)
-    # pygame.display.update()
 
 
-def select_piece(x):
+def select_white_piece(x):
     rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
     pygame.draw.ellipse(WINDOW, 'grey', rect)
+    return True
     # print('selected piece function works')
 
 
-def move_piece(x):
+def select_black_piece(x):
+    rect = list(black_pieces.values())[list(black_pieces.values()).index(x)]
+    pygame.draw.ellipse(WINDOW, 'grey', rect)
+    return True
+    # print('selected piece function works')
+
+
+def move_white_piece(x):
     pos = pygame.mouse.get_pos()
     rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
     if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < pos[1]-rect.center[1] < 150:
-        if (rect.x+([-100, 100][pos[0]-rect.x > 0]), rect.y+100, 50, 50) not in white_pieces.values():
+        if (rect.x+([-100, 100][pos[0]-rect.x > 0]), rect.y+100, 50, 50) not in (white_pieces | black_pieces).values():
+            # if (rect.x + ([-100, 100][pos[0] - rect.x > 0]), rect.y + 100, 50, 50) not in black_pieces.values():
             '''
             This is for when we have kings
 if rect in kings.values():
     if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < abs(pos[1]-rect.center[1]) < 150:
-        if rect.x+=([-100, 100][pos[0]-rect.x > 0], rect.y+=([-100, 100][pos[1]-rect.y > 0], 
+        if rect.x+([-100, 100][pos[0]-rect.x > 0], rect.y+([-100, 100][pos[1]-rect.y > 0], 
     50, 50) not in white_pieces.values(): 'put the bottom code in here' rect.y+=([-100, 100][pos[1]-rect.y > 0]
             '''
             pygame.draw.ellipse(WINDOW, 'black', rect)
             rect.x += ([-100, 100][pos[0]-rect.x > 0])
             rect.y += 100
             pygame.draw.ellipse(WINDOW, 'white', rect)
+            return True
         else:
             print('Another piece at selected location. Try again')
             pygame.draw.ellipse(WINDOW, 'white', rect)
     else:
         print('Illegal move. Try again')
         pygame.draw.ellipse(WINDOW, 'white', rect)
+
+
+def move_black_piece(x):
+    pos = pygame.mouse.get_pos()
+    rect = list(black_pieces.values())[list(black_pieces.values()).index(x)]
+    if 50 < abs(pos[0]-rect.center[0]) < 150 and -150 < pos[1]-rect.center[1] < -50:
+        if (rect.x+([-100, 100][pos[0]-rect.x > 0]), rect.y-100, 50, 50) not in (white_pieces | black_pieces).values():
+            # if (rect.x + ([-100, 100][pos[0] - rect.x > 0]), rect.y - 100, 50, 50) not in white_pieces.values():
+            pygame.draw.ellipse(WINDOW, 'black', rect)
+            rect.x += ([-100, 100][pos[0]-rect.x > 0])
+            rect.y -= 100
+            pygame.draw.ellipse(WINDOW, black_color, rect)
+            return True
+        else:
+            print('Another piece at selected location. Try again')
+            pygame.draw.ellipse(WINDOW, black_color, rect)
+    else:
+        print('Illegal move. Try again')
+        pygame.draw.ellipse(WINDOW, black_color, rect)
 
 
 def main():
@@ -68,6 +97,7 @@ def main():
     run = True
     selected = False
     mouse_click = 0
+    turn = 0
     while run:
         clock.tick(FPS)
         for event in pygame.event.get():
@@ -79,20 +109,35 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 pos = pygame.mouse.get_pos()
                 mouse_click += 1
+                print(turn)
                 if selected is False:
-                    for i in white_pieces.values():
+                    for i in [white_pieces.values(), black_pieces.values()][turn % 2]:
                         # works. but object is a rectangle. it considers that whole are a piece, not just the circle
                         if abs(i.x + 25 - pos[0]) <= 25 and abs(i.y + 25 - pos[-1]) <= 25:
                             # print('piece selected', pos, i)
-                            select_piece(i)
-                            select = i
-                            selected = True
+                            if turn % 2 == 0:
+                                j = select_white_piece(i)
+                                # print('select white piece')
+                            else:
+                                j = select_black_piece(i)
+                                # print('select black piece')
+                            if j:
+                                select = i
+                                selected = True
                 if mouse_click == 2 and selected:
                     # moves piece. Centers too
                     # print(select)
-                    move_piece(select)
+                    if turn % 2 == 0:
+                        v = move_white_piece(select)
+                        # print('move white piece')
+                    else:
+                        v = move_black_piece(select)
+                        # print('move black piece')
+                    if v:
+                        turn += 1
                     selected = False
                     mouse_click = 0
+
         pygame.display.update()
     pygame.quit()
     sys.exit()
