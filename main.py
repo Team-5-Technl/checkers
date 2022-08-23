@@ -24,6 +24,8 @@ def draw_side_bar():
     WINDOW.blit(top_text, (840, 50))
     pygame.draw.ellipse(WINDOW, 'white', (900, 250, 50, 50))
     pygame.draw.ellipse(WINDOW, 'red', (900, 500, 50, 50))
+    pygame.draw.rect(WINDOW, (100, 100, 100), pygame.Rect(1030, 250, 100, 50))
+    pygame.draw.rect(WINDOW, (100, 100, 100), pygame.Rect(1030, 500, 100, 50))
     white_score_text = FONT.render((f"    |  {white_score}"), 1, (255, 255, 255))
     red_score_text = FONT.render((f"    |  {black_score}"), 1, (255, 255, 255))
     WINDOW.blit(white_score_text, (900, 255))
