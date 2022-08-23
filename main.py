@@ -5,7 +5,7 @@ import sys
 pygame.font.init()
 
 # STATIC VARIABLES #
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = 1200, 800
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BOARD = pygame.image.load(os.path.join('Assets', 'Board.png'))
 FPS = 10
@@ -13,13 +13,25 @@ black_color = (88, 16, 0)
 selected_black_color = (51, 41, 39)
 white_score = 0
 black_score = 0
+FONT = pygame.font.SysFont('Consolas', 40)
 ####################
 white_pieces = {}
 black_pieces = {}
 kings = {}
 
+def draw_side_bar():
+    top_text = FONT.render((f"Checkers score:"), 1, (255, 255, 255))
+    WINDOW.blit(top_text, (840, 50))
+    pygame.draw.ellipse(WINDOW, 'white', (900, 250, 50, 50))
+    pygame.draw.ellipse(WINDOW, 'red', (900, 500, 50, 50))
+    white_score_text = FONT.render((f"    |  {white_score}"), 1, (255, 255, 255))
+    red_score_text = FONT.render((f"    |  {black_score}"), 1, (255, 255, 255))
+    WINDOW.blit(white_score_text, (900, 255))
+    WINDOW.blit(red_score_text, (900, 505))
+    pygame.display.update()
 
 def draw_window():
+    WINDOW.fill((100, 100, 100))
     WINDOW.blit(BOARD, (0, 0))
     for i in range(24):
         if i < 12:
@@ -178,7 +190,7 @@ def main():
                         turn += 1
                     selected = False
                     mouse_click = 0
-
+        draw_side_bar()
         pygame.display.update()
     pygame.quit()
     sys.exit()
