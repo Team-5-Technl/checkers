@@ -1,1 +1,1 @@
-Nathan, please put rules here
+Everyone, please put rules here
