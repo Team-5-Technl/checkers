@@ -1,6 +1,7 @@
 import os
 import pygame
 import sys
+import time
 
 pygame.font.init()
 
@@ -20,7 +21,11 @@ red_pieces = {}
 kings = {}
 
 
-def draw_side_bar():
+def draw_side_bar(turn):
+    if turn % 2 == 0:
+        turn_text = 'white'
+    else:
+        turn_text = 'red'
     top_text = FONT.render(f"Checkers score:", True, (255, 255, 255))
     WINDOW.blit(top_text, (840, 50))
     pygame.draw.ellipse(WINDOW, 'white', (900, 250, 50, 50))
@@ -31,6 +36,11 @@ def draw_side_bar():
     red_score_text = FONT.render(f"    |  {red_score}", True, (255, 255, 255))
     WINDOW.blit(white_score_text, (900, 255))
     WINDOW.blit(red_score_text, (900, 505))
+    pygame.draw.rect(WINDOW, (100, 100, 100), pygame.Rect(1000, 620, 200, 50))
+    turn_text = FONT.render(f"Turn: {turn_text}", True, (255, 255, 255))
+    WINDOW.blit(turn_text, (885, 630))
+
+    y = 600
     pygame.display.update()
 
 
@@ -58,8 +68,8 @@ def select_white_piece(x):
     rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
     pygame.draw.ellipse(WINDOW, 'grey', rect)
     '''TESTING THE DISPLAY OF THE CROWN IMAGE '''
-    WINDOW.blit(CROWN, (rect.left+2, rect.top+15))
-    '''END TEST CODE''' 
+    #WINDOW.blit(CROWN, (rect.left+2, rect.top+15))
+    '''END TEST CODE'''
     return True
 
 
@@ -144,7 +154,6 @@ def capture_white_piece(x):
         print('Capture failed. Another piece. Try again')
         pygame.draw.ellipse(WINDOW, 'red', rect)
 
-
 # for white pieces
 def capture_red_piece(x):
     global white_score
@@ -167,6 +176,17 @@ def capture_red_piece(x):
         print('Capture failed. Another piece. Try again')
         pygame.draw.ellipse(WINDOW, 'white', rect)
 
+def winner():
+    if red_score >= 12:
+        pygame.draw.rect(WINDOW, (190, 100, 100), pygame.Rect(0, 0, 1200, 800))
+        winner_text = FONT.render(f"RED WINS!", True, (255, 255, 255))
+        WINDOW.blit(winner_text, (WIDTH/2 - 100, HEIGHT/2 - 50))
+    elif white_score >= 12:
+        pygame.draw.rect(WINDOW, (200, 200, 200), pygame.Rect(0, 0, 1200, 800))
+        winner_text = FONT.render(f"WHITE WINS!", True, (255, 255, 255))
+        WINDOW.blit(winner_text, (WIDTH/2 - 100, HEIGHT/2 - 50))
+    pygame.display.update()
+    time.sleep(10)
 
 def main():
     global select
@@ -178,8 +198,6 @@ def main():
     turn = 0
     while run:
         clock.tick(FPS)
-        if red_score == 12 or white_score == 12:
-            run = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -215,7 +233,10 @@ def main():
                         turn += 1
                     selected = False
                     mouse_click = 0
-        draw_side_bar()
+        draw_side_bar(turn)
+        if red_score == 12 or white_score == 12:
+            winner()
+            run = False
         pygame.display.update()
     pygame.quit()
     sys.exit()
