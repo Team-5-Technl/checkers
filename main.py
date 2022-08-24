@@ -1,6 +1,7 @@
 import os
 import pygame
 import sys
+import time
 
 pygame.font.init()
 
@@ -9,6 +10,7 @@ WIDTH, HEIGHT = 1200, 800
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BOARD = pygame.image.load(os.path.join('Assets', 'Board.png'))
 FPS = 20
+CROWN = pygame.transform.scale(pygame.image.load('Assets/crown.png'), (44, 25))
 selected_black_color = (88, 16, 0)
 white_score = 0
 red_score = 0
@@ -19,7 +21,11 @@ red_pieces = {}
 kings = {}
 
 
-def draw_side_bar():
+def draw_side_bar(turn):
+    if turn % 2 == 0:
+        turn_text = 'white'
+    else:
+        turn_text = 'red'
     top_text = FONT.render(f"Checkers score:", True, (255, 255, 255))
     WINDOW.blit(top_text, (840, 50))
     pygame.draw.ellipse(WINDOW, 'white', (900, 250, 50, 50))
@@ -30,21 +36,25 @@ def draw_side_bar():
     red_score_text = FONT.render(f"    |  {red_score}", True, (255, 255, 255))
     WINDOW.blit(white_score_text, (900, 255))
     WINDOW.blit(red_score_text, (900, 505))
+    pygame.draw.rect(WINDOW, (100, 100, 100), pygame.Rect(1000, 620, 200, 50))
+    turn_text = FONT.render(f"Turn: {turn_text}", True, (255, 255, 255))
+    WINDOW.blit(turn_text, (885, 630))
+    y = 600
     pygame.display.update()
 
 
 def draw_window():
     WINDOW.fill((100, 100, 100))
     WINDOW.blit(BOARD, (0, 0))
-    for i in range(24):
-        if i < 12:
-            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * ((i // 4) % 2))), 25 + 100 * (i // 4), 50, 50)
-            white_pieces['rectangle_' + str(i + 1)] = rectangle_i
-            pygame.draw.ellipse(WINDOW, 'white', rectangle_i)
+    for p in range(24):
+        if p < 12:
+            rectangle_p = pygame.Rect(25 + (200 * (p % 4) + (100 * ((p // 4) % 2))), 25 + 100 * (p // 4), 50, 50)
+            white_pieces['rectangle_' + str(p + 1)] = rectangle_p
+            pygame.draw.ellipse(WINDOW, 'white', rectangle_p)
         else:
-            rectangle_i = pygame.Rect(25 + (200 * (i % 4) + (100 * (i // 4 % 2))), 225 + 100 * (i // 4), 50, 50)
-            red_pieces['rectangle_' + str(i + 1)] = rectangle_i
-            pygame.draw.ellipse(WINDOW, 'red', rectangle_i)
+            rectangle_p = pygame.Rect(25 + (200 * (p % 4) + (100 * (p // 4 % 2))), 225 + 100 * (p // 4), 50, 50)
+            red_pieces['rectangle_' + str(p + 1)] = rectangle_p
+            pygame.draw.ellipse(WINDOW, 'red', rectangle_p)
 
 
 def end_turn():
@@ -55,6 +65,11 @@ def end_turn():
 
 def select_white_piece(x):
     pygame.draw.ellipse(WINDOW, 'grey', x)
+    rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
+    pygame.draw.ellipse(WINDOW, 'grey', rect)
+    '''TESTING THE DISPLAY OF THE CROWN IMAGE '''
+    # WINDOW.blit(CROWN, (rect.left+2, rect.top+15))
+    '''END TEST CODE'''
     return True
 
 
@@ -181,6 +196,19 @@ def capture_red_piece(x):
         pygame.draw.ellipse(WINDOW, 'white', rect)
 
 
+def winner():
+    if red_score >= 12:
+        pygame.draw.rect(WINDOW, (190, 100, 100), pygame.Rect(0, 0, 1200, 800))
+        winner_text = FONT.render(f"RED WINS!", True, (255, 255, 255))
+        WINDOW.blit(winner_text, (WIDTH/2 - 100, HEIGHT/2 - 50))
+    elif white_score >= 12:
+        pygame.draw.rect(WINDOW, (200, 200, 200), pygame.Rect(0, 0, 1200, 800))
+        winner_text = FONT.render(f"WHITE WINS!", True, (255, 255, 255))
+        WINDOW.blit(winner_text, (WIDTH/2 - 100, HEIGHT/2 - 50))
+    pygame.display.update()
+    time.sleep(10)
+
+
 def main():
     global i
     clock = pygame.time.Clock()
@@ -191,8 +219,6 @@ def main():
     turn = 0
     while run:
         clock.tick(FPS)
-        if red_score == 12 or white_score == 12:
-            run = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -224,7 +250,10 @@ def main():
                         turn += 1
                     selected = False
                     mouse_click = 0
-        draw_side_bar()
+        draw_side_bar(turn)
+        if red_score == 12 or white_score == 12:
+            winner()
+            run = False
         pygame.display.update()
     pygame.quit()
     sys.exit()
