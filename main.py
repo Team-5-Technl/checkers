@@ -8,6 +8,7 @@ pygame.font.init()
 WIDTH, HEIGHT = 1200, 800
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 BOARD = pygame.image.load(os.path.join('Assets', 'Board.png'))
+CROWN = pygame.transform.scale(pygame.image.load('Assets/crown.png'), (44, 25))
 FPS = 10
 selected_black_color = (88, 16, 0)
 white_score = 0
@@ -56,6 +57,9 @@ def end_turn():
 def select_white_piece(x):
     rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
     pygame.draw.ellipse(WINDOW, 'grey', rect)
+    '''TESTING THE DISPLAY OF THE CROWN IMAGE '''
+    WINDOW.blit(CROWN, (rect.left+2, rect.top+15))
+    '''END TEST CODE''' 
     return True
 
 
