@@ -198,8 +198,9 @@ def capture_red_piece(x):
         red_capture = list(red_pieces.keys())[list(red_pieces.values()).index(new_place)]
         pygame.draw.ellipse(WINDOW, 'white', rect)
         pygame.draw.ellipse(WINDOW, 'black', red_pieces[red_capture])
-        ''' delcare piece as KING'''
-        WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+        if rect.y > 700:
+            ''' delcare piece as KING'''
+            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
         del red_pieces[red_capture]
         white_score += 1
         return True
