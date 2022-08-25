@@ -90,34 +90,47 @@ def move_white_piece(x):
         rect = list(red_pieces.values())[list(red_pieces.values()).index(x)]
         pygame.draw.ellipse(WINDOW, 'red', rect)
         return False
-    if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < pos[1]-rect.center[1] < 150:
-        new_place = (rect.x + ([-100, 100][pos[0] - rect.x > 0]), rect.y + 100, 50, 50)
-        if new_place not in (white_pieces | red_pieces).values() and new_place[0] < 800:
-            '''
-            This is for when we have kings
-if rect in kings.values():
-    if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < abs(pos[1]-rect.center[1]) < 150:
-        if rect.x+([-100, 100][pos[0]-rect.x > 0], rect.y+([-100, 100][pos[1]-rect.y > 0], 
-    50, 50) not in white_pieces.values(): 'put the bottom code in here' rect.y+=([-100, 100][pos[1]-rect.y > 0]
-            '''
-            pygame.draw.ellipse(WINDOW, 'black', rect)
-            rect.x += ([-100, 100][pos[0]-rect.x > 0])
-            rect.y += 100
-            pygame.draw.ellipse(WINDOW, 'white', rect)
-            if rect.y > 700:
-                kings[list(white_pieces.keys())[list(white_pieces.values()).index(x)]] = rect
+    if x in kings.values():
+        WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+        if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < abs(pos[1]-rect.center[1]) < 150:
+            new_place = (rect.x+([-100, 100][pos[0] - rect.x > 0]), rect.y+([-100, 100][pos[1] - rect.x > 0]), 50, 50)
+            if new_place not in (white_pieces | red_pieces).values() and new_place[0] < 800:
+                pygame.draw.ellipse(WINDOW, 'black', rect)
+                rect.x += ([-100, 100][pos[0]-rect.x > 0])
+                rect.y += ([100, -100][pos[1]-rect.x > 0])
+                pygame.draw.ellipse(WINDOW, 'white', rect)
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-            elif rect in kings.values():
+                return True
+            if new_place not in white_pieces.values() and new_place in red_pieces.values():
+                capture_red_piece(x)
+            else:
+                print('Another piece at selected location. Try again')
+                pygame.draw.ellipse(WINDOW, 'white', rect)
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-            return True
-        if new_place not in white_pieces.values() and new_place in red_pieces.values():
-            capture_red_piece(x)
         else:
-            print('Another piece at selected location. Try again')
+            print('Illegal move. Try again')
             pygame.draw.ellipse(WINDOW, 'white', rect)
+            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
     else:
-        print('Illegal move. Try again')
-        pygame.draw.ellipse(WINDOW, 'white', rect)
+        if 50 < abs(pos[0]-rect.center[0]) < 150 and 50 < pos[1]-rect.center[1] < 150:
+            new_place = (rect.x + ([-100, 100][pos[0] - rect.x > 0]), rect.y + 100, 50, 50)
+            if new_place not in (white_pieces | red_pieces).values() and new_place[0] < 800:
+                pygame.draw.ellipse(WINDOW, 'black', rect)
+                rect.x += ([-100, 100][pos[0]-rect.x > 0])
+                rect.y += 100
+                pygame.draw.ellipse(WINDOW, 'white', rect)
+                if rect.y > 700:
+                    kings[list(white_pieces.keys())[list(white_pieces.values()).index(x)]] = rect
+                    WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+                return True
+            if new_place not in white_pieces.values() and new_place in red_pieces.values():
+                capture_red_piece(x)
+            else:
+                print('Another piece at selected location. Try again')
+                pygame.draw.ellipse(WINDOW, 'white', rect)
+        else:
+            print('Illegal move. Try again')
+            pygame.draw.ellipse(WINDOW, 'white', rect)
 
 
 def move_red_piece(x):
@@ -129,27 +142,47 @@ def move_red_piece(x):
         rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
         pygame.draw.ellipse(WINDOW, 'white', rect)
         return False
-    if 50 < abs(pos[0]-rect.center[0]) < 150 and -150 < pos[1]-rect.center[1] < -50:
-        new_place = (rect.x+([-100, 100][pos[0]-rect.x > 0]), rect.y-100, 50, 50)
-        if new_place not in (white_pieces | red_pieces).values() and new_place[0] < 800:
-            pygame.draw.ellipse(WINDOW, 'black', rect)
-            rect.x += ([-100, 100][pos[0]-rect.x > 0])
-            rect.y -= 100
-            pygame.draw.ellipse(WINDOW, 'red', rect)
-            if rect.y < 100:
-                kings[list(red_pieces.keys())[list(red_pieces.values()).index(x)]] = rect
+    if x in kings.values():
+        WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+        if 50 < abs(pos[0]-rect.center[0]) < 150 and -150 < pos[1]-rect.center[1] < -50:
+            new_place = (rect.x+([-100, 100][pos[0] - rect.x > 0]), rect.y+([-100, 100][pos[1] - rect.x > 0]), 50, 50)
+            if new_place not in (red_pieces | white_pieces).values() and new_place[0] < 800:
+                pygame.draw.ellipse(WINDOW, 'black', rect)
+                rect.x += ([-100, 100][pos[0]-rect.x > 0])
+                rect.y += ([100, -100][pos[1]-rect.x > 0])
+                pygame.draw.ellipse(WINDOW, 'red', rect)
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-            elif rect in kings.values():
+                return True
+            if new_place not in red_pieces.values() and new_place in white_pieces.values():
+                capture_red_piece(x)
+            else:
+                print('Another piece at selected location. Try again')
+                pygame.draw.ellipse(WINDOW, 'red', rect)
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-            return True
-        if new_place not in red_pieces.values() and new_place in white_pieces.values():
-            capture_white_piece(x)
         else:
-            print('Another piece at selected location. Try again')
+            print('Illegal move. Try again')
             pygame.draw.ellipse(WINDOW, 'red', rect)
+            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
     else:
-        print('Illegal move. Try again')
-        pygame.draw.ellipse(WINDOW, 'red', rect)
+        if 50 < abs(pos[0] - rect.center[0]) < 150 and -150 < pos[1] - rect.center[1] < -50:
+            new_place = (rect.x + ([-100, 100][pos[0] - rect.x > 0]), rect.y - 100, 50, 50)
+            if new_place not in (white_pieces | red_pieces).values() and new_place[0] < 800:
+                pygame.draw.ellipse(WINDOW, 'black', rect)
+                rect.x += ([-100, 100][pos[0] - rect.x > 0])
+                rect.y -= 100
+                pygame.draw.ellipse(WINDOW, 'red', rect)
+                if rect.y <= 100:
+                    kings[list(red_pieces.keys())[list(red_pieces.values()).index(x)]] = rect
+                    WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+                return True
+            if new_place not in red_pieces.values() and new_place in white_pieces.values():
+                capture_white_piece(x)
+            else:
+                print('Another piece at selected location. Try again')
+                pygame.draw.ellipse(WINDOW, 'red', rect)
+        else:
+            print('Illegal move. Try again')
+            pygame.draw.ellipse(WINDOW, 'red', rect)
 
 
 # for red pieces
@@ -174,8 +207,7 @@ def capture_white_piece(x):
         pygame.draw.ellipse(WINDOW, 'black', white_pieces[white_capture])
         if rect.y < 100:
             kings[list(red_pieces.keys())[list(red_pieces.values()).index(x)]] = rect
-            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-        elif rect in kings.values():
+        if rect in kings.values():
             WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
         del white_pieces[white_capture]
         red_score += 1
@@ -208,8 +240,7 @@ def capture_red_piece(x):
         pygame.draw.ellipse(WINDOW, 'black', red_pieces[red_capture])
         if rect.y > 700:
             kings[list(white_pieces.keys())[list(white_pieces.values()).index(x)]] = rect
-            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
-        elif rect in kings.values():
+        if rect in kings.values():
             WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
         del red_pieces[red_capture]
         white_score += 1
