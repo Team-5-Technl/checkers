@@ -67,14 +67,17 @@ def select_white_piece(x):
     pygame.draw.ellipse(WINDOW, 'grey', x)
     rect = list(white_pieces.values())[list(white_pieces.values()).index(x)]
     pygame.draw.ellipse(WINDOW, 'grey', rect)
-    '''TESTING THE DISPLAY OF THE CROWN IMAGE '''
-    # WINDOW.blit(CROWN, (rect.left+2, rect.top+15))
-    '''END TEST CODE'''
+    if rect in kings.values():
+        WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
     return True
 
 
 def select_red_piece(x):
     pygame.draw.ellipse(WINDOW, selected_black_color, x)
+    rect = list(red_pieces.values())[list(red_pieces.values()).index(x)]
+    pygame.draw.ellipse(WINDOW, selected_black_color, rect)
+    if rect in kings.values():
+        WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
     return True
 
 
@@ -102,8 +105,9 @@ if rect in kings.values():
             rect.y += 100
             pygame.draw.ellipse(WINDOW, 'white', rect)
             if rect.y > 700:
-                ''' Need to declare piece as KING'''
-                kings[x] = rect
+                kings[list(white_pieces.keys())[list(white_pieces.values()).index(x)]] = rect
+                WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+            elif rect in kings.values():
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
             return True
         if new_place not in white_pieces.values() and new_place in red_pieces.values():
@@ -132,8 +136,10 @@ def move_red_piece(x):
             rect.x += ([-100, 100][pos[0]-rect.x > 0])
             rect.y -= 100
             pygame.draw.ellipse(WINDOW, 'red', rect)
-            ''' Need to declare piece as KING'''
-            if rect.y <= 100:
+            if rect.y < 100:
+                kings[list(red_pieces.keys())[list(red_pieces.values()).index(x)]] = rect
+                WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+            elif rect in kings.values():
                 WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
             return True
         if new_place not in red_pieces.values() and new_place in white_pieces.values():
@@ -166,8 +172,10 @@ def capture_white_piece(x):
         white_capture = list(white_pieces.keys())[list(white_pieces.values()).index(new_place)]
         pygame.draw.ellipse(WINDOW, 'red', rect)
         pygame.draw.ellipse(WINDOW, 'black', white_pieces[white_capture])
-        ''' Need to delcare piece as KING'''
-        if rect.y <= 100:
+        if rect.y < 100:
+            kings[list(red_pieces.keys())[list(red_pieces.values()).index(x)]] = rect
+            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+        elif rect in kings.values():
             WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
         del white_pieces[white_capture]
         red_score += 1
@@ -199,7 +207,9 @@ def capture_red_piece(x):
         pygame.draw.ellipse(WINDOW, 'white', rect)
         pygame.draw.ellipse(WINDOW, 'black', red_pieces[red_capture])
         if rect.y > 700:
-            ''' delcare piece as KING'''
+            kings[list(white_pieces.keys())[list(white_pieces.values()).index(x)]] = rect
+            WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
+        elif rect in kings.values():
             WINDOW.blit(CROWN, (rect.left + 2, rect.top + 15))
         del red_pieces[red_capture]
         white_score += 1
